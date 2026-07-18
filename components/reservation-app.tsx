@@ -289,14 +289,13 @@ export function ReservationApp() {
 
   const availableSlotGroups = useMemo(() => {
     const now = Date.now();
-    const max = now + 48 * 60 * 60 * 1000;
 
     return [0, 1, 2]
       .map((dayOffset) => ({
         dayOffset,
         slots: SLOT_HOURS.map((hour) => madridSlotIso(dayOffset, hour)).filter((slot) => {
           const time = new Date(slot).getTime();
-          return time > now && time <= max;
+          return time > now;
         })
       }))
       .filter((group) => group.slots.length > 0);
@@ -737,7 +736,7 @@ export function ReservationApp() {
                 <Plus size={22} />
                 <div>
                   <h2>Nueva reserva</h2>
-                  <p>Slots fijos de 60 minutos, hasta 48h vista.</p>
+                  <p>Slots fijos de 60 minutos, hasta 2 días de antelación.</p>
                 </div>
               </div>
 

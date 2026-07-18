@@ -172,8 +172,8 @@ begin
     raise exception 'No puedes reservar un slot que ya ha empezado.';
   end if;
 
-  if p_slot_start > now() + interval '48 hours' then
-    raise exception 'Solo puedes reservar con hasta 48 horas de antelación.';
+  if (p_slot_start at time zone 'Europe/Madrid')::date > (now() at time zone 'Europe/Madrid')::date + 2 then
+    raise exception 'Solo puedes reservar con hasta 2 días de antelación.';
   end if;
 
   if not public.is_valid_madrid_slot(p_slot_start) then
