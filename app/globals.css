@@ -913,3 +913,101 @@ input:focus {
     display: none;
   }
 }
+
+/* Nuevos estados de reservas */
+.status-cancelled {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.status-no_show {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* Estilos de identificador de reserva */
+.booking-number {
+  font-family: monospace;
+  font-size: 0.85em;
+  color: var(--clay);
+  background: var(--chalk);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  font-weight: 700;
+  border: 1px solid var(--line);
+}
+
+/* Historial de reservas */
+.history-panel {
+  margin-top: 28px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.history-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow-soft);
+}
+
+.history-card-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.history-card-main h3 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  font-weight: 850;
+  color: var(--court-deep);
+}
+
+.history-card-main p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 4px;
+  font-size: 0.84rem;
+  color: var(--muted);
+  font-weight: 550;
+}
+
+.history-card-main p:last-child {
+  margin-bottom: 0;
+}
+
+.history-card-main p svg {
+  color: var(--clay);
+  flex-shrink: 0;
+}
+
+.history-card-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+@media (max-width: 760px) {
+  .history-card {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .history-card-meta {
+    align-items: flex-start;
+  }
+}
+

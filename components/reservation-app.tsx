@@ -34,6 +34,14 @@ type AdminNeighbor = {
 };
 type CredentialSet = { login: string; password: string } | null;
 
+const STATUS_LABELS: Record<string, string> = {
+  open: "Abierta",
+  full: "Completa",
+  checked_in: "Check-in",
+  no_show: "No asistido",
+  cancelled: "Cancelada"
+};
+
 const SLOT_HOURS = Array.from({ length: 13 }, (_, index) => index + 9);
 
 function formatDateTime(value: string) {
@@ -188,6 +196,7 @@ export function ReservationApp() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [neighbors, setNeighbors] = useState<AdminNeighbor[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [historyBookings, setHistoryBookings] = useState<Booking[]>([]);
   const [counts, setCounts] = useState<Counts>({});
   const [participantsByBooking, setParticipantsByBooking] = useState<Record<string, BookingParticipant[]>>({});
   const [participantBookingIds, setParticipantBookingIds] = useState<string[]>([]);
@@ -206,6 +215,7 @@ export function ReservationApp() {
     if (!sessionData.session) {
       setProfile(null);
       setBookings([]);
+      setHistoryBookings([]);
       setParticipantsByBooking({});
       setParticipantBookingIds([]);
       setCheckInBookingIds([]);
@@ -235,9 +245,29 @@ export function ReservationApp() {
 
     const { data: bookingData } = await supabase
       .from("bookings")
-      .select("id, sport, status, slot_start, local_date, creator_user_id, creator_home_id, profiles!bookings_creator_user_id_fkey(full_name, homes(label))")
+      .select("id, booking_number, sport, status, slot_start, local_date, creator_user_id, creator_home_id, profiles!bookings_creator_user_id_fkey(full_name, homes(label))")
       .gte("slot_start", new Date(Date.now() - 60 * 60 * 1000).toISOString())
       .order("slot_start", { ascending: true });
+
+    // Cargar historial de reservas del usuario (donde participa)
+    const { data: historyData } = await supabase
+      .from("bookings")
+      .select(`
+        id,
+        booking_number,
+        sport,
+        status,
+        slot_start,
+        local_date,
+        creator_user_id,
+        creator_home_id,
+        profiles!bookings_creator_user_id_fkey(full_name, homes(label)),
+        booking_participants!inner(user_id)
+      `)
+      .eq("booking_participants.user_id", sessionData.session.user.id)
+      .order("slot_start", { ascending: false });
+
+    setHistoryBookings((historyData ?? []) as unknown as Booking[]);
 
     const ids = (bookingData ?? []).map((booking: any) => booking.id);
     const nextCounts: Counts = {};
@@ -881,7 +911,9 @@ export function ReservationApp() {
                       <div className="booking-main">
                         <div className="sport-icon">{booking.sport === "tennis" ? "T" : "F"}</div>
                         <div>
-                          <h3>{SPORT_LABELS[booking.sport]}</h3>
+                          <h3>
+                            {SPORT_LABELS[booking.sport]} <span className="booking-number">#{booking.booking_number}</span>
+                          </h3>
                           <p>
                             <Clock size={15} />
                             {formatDateTime(booking.slot_start)}
@@ -893,7 +925,9 @@ export function ReservationApp() {
                         </div>
                       </div>
                       <div className="booking-meta">
-                        <span className={`status status-${booking.status}`}>{booking.status}</span>
+                        <span className={`status status-${booking.status}`}>
+                          {STATUS_LABELS[booking.status] || booking.status}
+                        </span>
                         <strong>
                           {bookingCounts.participants}/{capacity}
                         </strong>
@@ -958,6 +992,51 @@ export function ReservationApp() {
               </div>
             ) : (
               <p className="empty-state">No hay reservas activas en este momento.</p>
+            )}
+          </section>
+
+          <section className="panel history-panel">
+            <div className="section-heading">
+              <CalendarCheck size={22} />
+              <div>
+                <h2>Historial de reservas</h2>
+                <p>Tu registro histórico de reservas (creadas o como participante).</p>
+              </div>
+            </div>
+
+            {historyBookings.length ? (
+              <div className="history-list">
+                {historyBookings.map((booking) => {
+                  const isCreator = booking.creator_user_id === profile.id;
+                  return (
+                    <article className="history-card" key={booking.id}>
+                      <div className="history-card-main">
+                        <div className="sport-icon">{booking.sport === "tennis" ? "T" : "F"}</div>
+                        <div>
+                          <h3>
+                            {SPORT_LABELS[booking.sport]} <span className="booking-number">#{booking.booking_number}</span>
+                          </h3>
+                          <p>
+                            <Clock size={14} />
+                            {formatDateTime(booking.slot_start)}
+                          </p>
+                          <p>
+                            <Shield size={14} />
+                            {isCreator ? "Creada por ti" : `Creada por: ${booking.profiles?.full_name ?? "Vecino"} (${booking.profiles?.homes?.label ?? "Piso"})`}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="history-card-meta">
+                        <span className={`status status-${booking.status}`}>
+                          {STATUS_LABELS[booking.status] || booking.status}
+                        </span>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="empty-state">No tienes reservas en tu historial.</p>
             )}
           </section>
         </>

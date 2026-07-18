@@ -11,6 +11,7 @@ export type Profile = {
 
 export type Booking = {
   id: string;
+  booking_number: number;
   sport: Sport;
   status: BookingStatus;
   slot_start: string;
