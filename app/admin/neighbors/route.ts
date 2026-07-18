@@ -4,9 +4,8 @@ import { createClient as createSupabaseAdminClient } from "@supabase/supabase-js
 import { NextResponse } from "next/server";
 
 function generatePassword() {
-  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!*-_";
-  const bytes = crypto.getRandomValues(new Uint8Array(14));
-  return Array.from(bytes, (byte) => alphabet[byte % alphabet.length]).join("");
+  const bytes = crypto.getRandomValues(new Uint8Array(6));
+  return Array.from(bytes, (byte) => (byte % 10).toString()).join("");
 }
 
 async function requireAdmin() {
