@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Scanner } from "@yudiel/react-qr-scanner";
 
 type Counts = Record<string, { participants: number; waitlist: number }>;
 type BookingParticipant = { full_name: string; homes?: { label: string } | null };
@@ -207,6 +208,7 @@ export function ReservationApp() {
   const [isBusy, setIsBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [isCheckInQrVisible, setIsCheckInQrVisible] = useState(false);
+  const [scannerBookingId, setScannerBookingId] = useState<string | null>(null);
 
   const loadData = useCallback(async () => {
     const { data: sessionData } = await supabase.auth.getSession();
@@ -1008,10 +1010,10 @@ export function ReservationApp() {
                           <button
                             className="secondary-action"
                             disabled={isBusy || checkInBookingSet.has(booking.id) || !isWithinCheckInWindow(booking.slot_start)}
-                            onClick={() => checkInBooking(booking.id)}
+                            onClick={() => setScannerBookingId(booking.id)}
                           >
                             <CalendarCheck size={17} />
-                            {checkInBookingSet.has(booking.id) ? "Check-in hecho" : "Check-in"}
+                            {checkInBookingSet.has(booking.id) ? "Check-in hecho" : "Check-in cámara"}
                           </button>
                         ) : null}
                         <button className="secondary-action" onClick={() => shareBooking(booking)}>
@@ -1082,6 +1084,34 @@ export function ReservationApp() {
             )}
           </section>
         </>
+      )}
+
+      {scannerBookingId && (
+        <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(0,0,0,0.8)", zIndex: 9999, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "1rem" }}>
+          <div style={{ backgroundColor: "var(--surface)", border: "1px solid var(--border)", padding: "1.5rem", borderRadius: "12px", width: "100%", maxWidth: "400px", display: "flex", flexDirection: "column", gap: "1rem", boxShadow: "0 10px 40px rgba(0,0,0,0.3)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h3 style={{ margin: 0 }}>Escanear QR de la pista</h3>
+              <button className="icon-button" onClick={() => setScannerBookingId(null)}><XCircle size={20} /></button>
+            </div>
+            <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "0.9rem" }}>Apunta tu cámara al QR que se encuentra en la entrada de la pista.</p>
+            <div style={{ borderRadius: "8px", overflow: "hidden", aspectRatio: "1/1", backgroundColor: "black" }}>
+              <Scanner 
+                onScan={(detectedCodes) => {
+                  if (detectedCodes.length > 0) {
+                    const text = detectedCodes[0].rawValue;
+                    if (text.includes("/check-in")) {
+                      setScannerBookingId(null);
+                      checkInBooking(scannerBookingId);
+                    } else {
+                      setMessage("El código QR escaneado no pertenece a la pista.");
+                    }
+                  }
+                }} 
+              />
+            </div>
+            <button className="secondary-action" onClick={() => setScannerBookingId(null)}>Cancelar</button>
+          </div>
+        </div>
       )}
     </main>
   );
