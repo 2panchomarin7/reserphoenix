@@ -100,9 +100,7 @@ function madridDayKey(value: string) {
 }
 
 function isWithinCheckInWindow(slotStart: string) {
-  const now = Date.now();
-  const slot = new Date(slotStart).getTime();
-  return now >= slot - 15 * 60 * 1000 && now <= slot + 15 * 60 * 1000;
+  return true; // Deshabilitado para pruebas a cualquier hora
 }
 
 function madridOffsetFor(date: Date) {
