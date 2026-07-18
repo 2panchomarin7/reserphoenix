@@ -552,17 +552,61 @@ export function ReservationApp() {
   }
 
   async function leaveBooking(bookingId: string) {
+    const booking = bookings.find((b) => b.id === bookingId) || historyBookings.find((b) => b.id === bookingId);
+    if (booking) {
+      const slotTime = new Date(booking.slot_start).getTime();
+      const now = Date.now();
+      if (slotTime - now < 60 * 60 * 1000 && slotTime > now) {
+        if (!window.confirm("Estás cancelando con menos de 1 hora de antelación. Esto puede perjudicar a tus compañeros. A la tercera cancelación tardía, se bloquearán tus reservas por 3 días. ¿Deseas continuar?")) {
+          return;
+        }
+      }
+    }
+
     setIsBusy(true);
     const { data, error } = await supabase.rpc("leave_booking", { p_booking_id: bookingId });
 
     if (error) {
       setMessage(error.message);
+    } else if (data === "left_with_3day_block") {
+      setMessage("Has salido de la reserva. Debido a repetidas cancelaciones tardías, tus reservas han sido bloqueadas por 3 días.");
+    } else if (data === "left_with_late_warning") {
+      setMessage("Has salido de la reserva, pero cuenta como cancelación tardía.");
     } else if (data === "left_with_cooldown") {
       setMessage("Has salido de la reserva. Espera 5 minutos antes de unirte a otro deporte.");
     } else if (data === "left_waitlist") {
       setMessage("Has salido de la lista de espera.");
     } else {
       setMessage("Has salido de la reserva.");
+    }
+
+    await loadData();
+    setIsBusy(false);
+  }
+
+  async function cancelBooking(bookingId: string) {
+    const booking = bookings.find((b) => b.id === bookingId) || historyBookings.find((b) => b.id === bookingId);
+    if (booking) {
+      const slotTime = new Date(booking.slot_start).getTime();
+      const now = Date.now();
+      if (slotTime - now < 60 * 60 * 1000 && slotTime > now) {
+        if (!window.confirm("Estás cancelando con menos de 1 hora de antelación. Esto puede perjudicar a tus compañeros. A la tercera cancelación tardía, se bloquearán tus reservas por 3 días. ¿Deseas continuar?")) {
+          return;
+        }
+      }
+    }
+
+    setIsBusy(true);
+    const { data, error } = await supabase.rpc("cancel_booking", { p_booking_id: bookingId });
+
+    if (error) {
+      setMessage(error.message);
+    } else if (data === "cancelled_with_3day_block") {
+      setMessage("Reserva cancelada. Debido a repetidas cancelaciones tardías, tus reservas han sido bloqueadas por 3 días.");
+    } else if (data === "cancelled_with_late_warning") {
+      setMessage("Reserva cancelada. Cuenta como cancelación tardía.");
+    } else {
+      setMessage("Reserva cancelada.");
     }
 
     await loadData();
@@ -980,7 +1024,7 @@ export function ReservationApp() {
                           <button
                             className="danger-action"
                             disabled={isBusy}
-                            onClick={() => runAction(() => supabase.rpc("cancel_booking", { p_booking_id: booking.id }), "Reserva cancelada.")}
+                            onClick={() => cancelBooking(booking.id)}
                           >
                             Cancelar
                           </button>

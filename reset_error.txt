@@ -1,0 +1,205 @@
+Initialising login role...
+Do you want to reset the remote database? [y/N] y
+Resetting remote database...
+NOTICE (00000): dropping extension: pg_cron
+NOTICE (00000): dropping function: public.is_valid_madrid_slot
+NOTICE (00000): dropping function: public.touch_updated_at
+NOTICE (00000): drop cascades to 2 other objects
+NOTICE (00000): dropping function: public.set_booking_local_date
+NOTICE (00000): drop cascades to trigger bookings_set_local_date on table bookings
+NOTICE (00000): dropping function: public.is_admin
+NOTICE (00000): drop cascades to 11 other objects
+NOTICE (00000): dropping function: public.sport_capacity
+NOTICE (00000): dropping function: public.mark_expired_no_shows
+NOTICE (00000): dropping function: public.create_booking
+NOTICE (00000): dropping function: public.cancel_booking
+NOTICE (00000): dropping function: public.join_booking
+NOTICE (00000): dropping function: public.leave_booking
+NOTICE (00000): dropping function: public.check_in_booking
+NOTICE (00000): dropping function: public.check_in_booking
+NOTICE (00000): dropping table: public.bookings
+NOTICE (00000): drop cascades to 5 other objects
+NOTICE (00000): dropping table: public.booking_participants
+NOTICE (00000): dropping table: public.booking_waitlist
+NOTICE (00000): dropping table: public.checkins
+NOTICE (00000): dropping table: public.notification_events
+NOTICE (00000): dropping table: public.homes
+NOTICE (00000): drop cascades to constraint profiles_home_id_fkey on table profiles
+NOTICE (00000): dropping table: public.profiles
+NOTICE (00000): drop cascades to constraint booking_cooldowns_user_id_fkey on table booking_cooldowns
+NOTICE (00000): dropping table: public.booking_cooldowns
+NOTICE (00000): dropping table: public.notification_events_pkey
+NOTICE (00000): table "notification_events_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.bookings_slot_start_idx
+NOTICE (00000): table "bookings_slot_start_idx" does not exist, skipping
+NOTICE (00000): dropping table: public.bookings_status_slot_idx
+NOTICE (00000): table "bookings_status_slot_idx" does not exist, skipping
+NOTICE (00000): dropping table: public.booking_waitlist_order_idx
+NOTICE (00000): table "booking_waitlist_order_idx" does not exist, skipping
+NOTICE (00000): dropping table: public.homes_pkey
+NOTICE (00000): table "homes_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.bookings_one_active_per_slot_idx
+NOTICE (00000): table "bookings_one_active_per_slot_idx" does not exist, skipping
+NOTICE (00000): dropping table: public.bookings_one_active_created_per_home_day_idx
+NOTICE (00000): table "bookings_one_active_created_per_home_day_idx" does not exist, skipping
+NOTICE (00000): dropping table: public.booking_cooldowns_pkey
+NOTICE (00000): table "booking_cooldowns_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.booking_cooldowns_blocked_until_idx
+NOTICE (00000): table "booking_cooldowns_blocked_until_idx" does not exist, skipping
+NOTICE (00000): dropping table: public.notification_events_pending_idx
+NOTICE (00000): table "notification_events_pending_idx" does not exist, skipping
+NOTICE (00000): dropping table: public.homes_label_key
+NOTICE (00000): table "homes_label_key" does not exist, skipping
+NOTICE (00000): dropping table: public.profiles_pkey
+NOTICE (00000): table "profiles_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.bookings_pkey
+NOTICE (00000): table "bookings_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.booking_participants_pkey
+NOTICE (00000): table "booking_participants_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.booking_waitlist_pkey
+NOTICE (00000): table "booking_waitlist_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.checkins_pkey
+NOTICE (00000): table "checkins_pkey" does not exist, skipping
+NOTICE (00000): dropping table: public.checkins_booking_id_user_id_key
+NOTICE (00000): table "checkins_booking_id_user_id_key" does not exist, skipping
+NOTICE (00000): truncating table: auth.saml_relay_states
+NOTICE (00000): truncating table: auth.instances
+NOTICE (00000): truncating table: auth.refresh_tokens
+NOTICE (00000): truncating table: auth.users
+NOTICE (00000): truncate cascades to table "identities"
+NOTICE (00000): truncate cascades to table "sessions"
+NOTICE (00000): truncate cascades to table "mfa_factors"
+NOTICE (00000): truncate cascades to table "one_time_tokens"
+NOTICE (00000): truncate cascades to table "oauth_authorizations"
+NOTICE (00000): truncate cascades to table "oauth_consents"
+NOTICE (00000): truncate cascades to table "webauthn_credentials"
+NOTICE (00000): truncate cascades to table "webauthn_challenges"
+NOTICE (00000): truncate cascades to table "refresh_tokens"
+NOTICE (00000): truncate cascades to table "mfa_challenges"
+NOTICE (00000): truncate cascades to table "mfa_amr_claims"
+NOTICE (00000): truncating table: auth.identities
+NOTICE (00000): truncating table: auth.oauth_authorizations
+NOTICE (00000): truncating table: auth.webauthn_challenges
+NOTICE (00000): truncating table: auth.oauth_consents
+NOTICE (00000): truncating table: auth.webauthn_credentials
+NOTICE (00000): truncating table: auth.mfa_challenges
+NOTICE (00000): truncating table: auth.mfa_amr_claims
+NOTICE (00000): truncating table: auth.audit_log_entries
+NOTICE (00000): truncating table: auth.sso_domains
+NOTICE (00000): truncating table: auth.sso_providers
+NOTICE (00000): truncate cascades to table "sso_domains"
+NOTICE (00000): truncate cascades to table "saml_providers"
+NOTICE (00000): truncate cascades to table "saml_relay_states"
+NOTICE (00000): truncating table: auth.oauth_client_states
+NOTICE (00000): truncating table: auth.oauth_clients
+NOTICE (00000): truncate cascades to table "sessions"
+NOTICE (00000): truncate cascades to table "oauth_authorizations"
+NOTICE (00000): truncate cascades to table "oauth_consents"
+NOTICE (00000): truncate cascades to table "refresh_tokens"
+NOTICE (00000): truncate cascades to table "mfa_amr_claims"
+NOTICE (00000): truncating table: auth.custom_oauth_providers
+NOTICE (00000): truncating table: supabase_migrations.schema_migrations
+NOTICE (00000): truncating table: auth.flow_state
+NOTICE (00000): truncate cascades to table "saml_relay_states"
+NOTICE (00000): truncating table: auth.saml_providers
+NOTICE (00000): truncating table: auth.sessions
+NOTICE (00000): truncate cascades to table "refresh_tokens"
+NOTICE (00000): truncate cascades to table "mfa_amr_claims"
+NOTICE (00000): truncating table: auth.mfa_factors
+NOTICE (00000): truncate cascades to table "mfa_challenges"
+NOTICE (00000): truncating table: auth.one_time_tokens
+NOTICE (00000): dropping type: public.app_role
+NOTICE (00000): dropping type: public.sport_type
+NOTICE (00000): dropping type: public.booking_status
+NOTICE (00000): dropping type: public.notification_kind
+Applying migration 001_initial_schema.sql...
+NOTICE (42710): extension "pgcrypto" already exists, skipping
+Applying migration 002_booking_checkin_cooldown.sql...
+Applying migration 003_calendar_days_limit.sql...
+Applying migration 003_late_cancellations.sql...
+ERROR: cannot change return type of existing function (SQLSTATE 42P13)                                        
+At statement: 6                                                                                               
+-- Replace cancel_booking to allow late cancellation but apply penalty                                        
+create or replace function public.cancel_booking(p_booking_id uuid)                                           
+returns text                                                                                                  
+language plpgsql                                                                                              
+security definer                                                                                              
+set search_path = public                                                                                      
+as $$                                                                                                         
+declare                                                                                                       
+  v_user_id uuid := auth.uid();                                                                               
+  v_booking public.bookings%rowtype;                                                                          
+  v_is_admin boolean;                                                                                         
+  v_is_late boolean;                                                                                          
+  v_late_count integer;                                                                                       
+  v_blocked_until timestamptz := now() + interval '5 minutes';                                                
+begin                                                                                                         
+  if v_user_id is null then                                                                                   
+    raise exception 'Debes iniciar sesión para cancelar.';                                                    
+  end if;                                                                                                     
+                                                                                                              
+  select * into v_booking                                                                                     
+  from public.bookings                                                                                        
+  where id = p_booking_id                                                                                     
+  for update;                                                                                                 
+                                                                                                              
+  if not found or v_booking.status = 'cancelled' then                                                         
+    raise exception 'Reserva no encontrada.';                                                                 
+  end if;                                                                                                     
+                                                                                                              
+  v_is_admin := public.is_admin();                                                                            
+                                                                                                              
+  if not v_is_admin then                                                                                      
+    if v_booking.creator_user_id <> v_user_id then                                                            
+      raise exception 'Solo el creador o un admin puede cancelar esta reserva.';                              
+    end if;                                                                                                   
+                                                                                                              
+    if v_booking.slot_start <= now() then                                                                     
+      raise exception 'No puedes cancelar una reserva que ya ha empezado.';                                   
+    end if;                                                                                                   
+  end if;                                                                                                     
+                                                                                                              
+  v_is_late := v_booking.slot_start < now() + interval '1 hour';                                              
+                                                                                                              
+  update public.bookings                                                                                      
+  set status = 'cancelled',                                                                                   
+      cancelled_at = now(),                                                                                   
+      cancelled_by = v_user_id                                                                                
+  where id = p_booking_id;                                                                                    
+                                                                                                              
+  insert into public.notification_events (kind, booking_id, recipient_user_id, payload)                       
+  select 'booking_cancelled', p_booking_id, bp.user_id, jsonb_build_object('slot_start', v_booking.slot_start)
+  from public.booking_participants bp                                                                         
+  where bp.booking_id = p_booking_id and bp.user_id <> v_user_id;                                             
+                                                                                                              
+  if not v_is_admin and v_is_late then                                                                        
+    insert into public.late_cancellations (user_id, booking_id)                                               
+    values (v_user_id, p_booking_id);                                                                         
+                                                                                                              
+    select count(*) into v_late_count                                                                         
+    from public.late_cancellations                                                                            
+    where user_id = v_user_id;                                                                                
+                                                                                                              
+    if v_late_count >= 3 then                                                                                 
+      v_blocked_until := now() + interval '3 days';                                                           
+      delete from public.late_cancellations where user_id = v_user_id;                                        
+    end if;                                                                                                   
+                                                                                                              
+    insert into public.booking_cooldowns (user_id, blocked_until, last_booking_id, updated_at)                
+    values (v_user_id, v_blocked_until, p_booking_id, now())                                                  
+    on conflict (user_id) do update                                                                           
+      set blocked_until = greatest(public.booking_cooldowns.blocked_until, excluded.blocked_until),           
+          last_booking_id = excluded.last_booking_id,                                                         
+          updated_at = now();                                                                                 
+                                                                                                              
+    if v_late_count >= 3 then                                                                                 
+      return 'cancelled_with_3day_block';                                                                     
+    else                                                                                                      
+      return 'cancelled_with_late_warning';                                                                   
+    end if;                                                                                                   
+  end if;                                                                                                     
+                                                                                                              
+  return 'cancelled';                                                                                         
+end;                                                                                                          
+$$                                                                                                            
+Try rerunning the command with --debug to troubleshoot the error.
